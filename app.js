@@ -14,7 +14,7 @@ var campgroundRoutes=require("./routes/campground"),
 	commentRoutes=require("./routes/comments"),
 	indexRoutes=require("./routes/index");
 var session=require('express-session');
-const CassandraStore = require("cassandra-store");
+
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology',true);
 mongoose.set('useFindAndModify',false);
@@ -27,19 +27,11 @@ app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
 mongoose.connect(process.env.DATABASEURL);
-app.set('trust proxy', 1);
-
-app.use(session({
-cookie:{
-    secure: true,
-    maxAge:60000
-       },
-store: new RedisStore(),
-secret: 'secret',
-saveUninitialized: true,
-resave: false
+app.use(require("express-session")({
+	secret:"Hello World!!",
+	resave:false,
+	saveUninitialized:false
 }));
-
 app.use(function(req,res,next){
 if(!req.session){
     return next(new Error('Oh no')) //handle error
