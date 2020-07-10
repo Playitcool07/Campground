@@ -13,11 +13,12 @@ var methodOverride=require("method-override");
 var campgroundRoutes=require("./routes/campground"),
 	commentRoutes=require("./routes/comments"),
 	indexRoutes=require("./routes/index");
-
+var session=require('express-session');
+const CassandraStore = require("cassandra-store");
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology',true);
 mongoose.set('useFindAndModify',false);
-mongoose.connect(process.env.DATABASEURL);
+//mongoose.connect(process.env.DATABASEURL);
 
 app.set("view engine","ejs");
 app.use(bodyParser.urlencoded({extended:true}));
@@ -25,7 +26,7 @@ app.use(express.static(__dirname + "/public"));
 //app.use('/static', express.static(__dirname, 'public'));
 app.use(methodOverride("_method"));
 app.use(flash());
-
+mongoose.connect(process.env.DATABASEURL);
 
 //mongoose.connect({useFindAndModify:false,useNewUrlParser: true, useUnifiedTopology: true});
 //mongoose.connect('mongodb://localhost:27017/yelp_camp_v10', {useFindAndModify:false,useNewUrlParser: true, useUnifiedTopology: true});
@@ -35,7 +36,7 @@ app.use(flash());
 //seedDB();
 
 //Passport Configuration
-app.use(require("express-session")({
+app.use(session({
 	secret:"Hello World!!",
 	resave:false,
 	saveUninitialized:false
@@ -75,6 +76,6 @@ app.use(indexRoutes);
 app.use(campgroundRoutes); 
 app.use(commentRoutes);
 
-app.listen(3000,function(){
+app.listen(process.env.port||3000,function(){
 	console.log("Our Yelpcamp has started");
 })
