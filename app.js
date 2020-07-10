@@ -26,7 +26,7 @@ app.use(express.static(__dirname + "/public"));
 //app.use('/static', express.static(__dirname, 'public'));
 app.use(methodOverride("_method"));
 app.use(flash());
-mongoose.connect(process.env.DATABASEURL);
+mongoose.connect(process.env.DATABASEURL||'mongodb://localhost:27017/yelp_camp_v11');
 app.use(require("express-session")({
 	secret:"Hello World!!",
 	resave:false,
