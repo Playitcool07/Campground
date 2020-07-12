@@ -13,8 +13,8 @@ var methodOverride=require("method-override");
 var campgroundRoutes=require("./routes/campground"),
 	commentRoutes=require("./routes/comments"),
 	indexRoutes=require("./routes/index");
-var session=require('express-session');
-const MongoStore = require('connect-mongo')(session);
+const session=require('express-session'),
+ MongoStore = require('connect-mongo')(session);
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology',true);
@@ -29,7 +29,7 @@ app.use(methodOverride("_method"));
 app.use(flash());
 mongoose.connect(process.env.DATABASEURL||'mongodb://localhost:27017/yelp_camp_v11');
 app.use(session({
-	secret:"Hello World!!",
+	secret:"Hello-World",
 		store: new MongoStore({ mongooseConnection: mongoose.connection }),
 	resave:false,
 	saveUninitialized:false
