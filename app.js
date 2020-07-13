@@ -22,6 +22,8 @@ mongoose.set('useFindAndModify',false);
 //mongoose.connect(process.env.DATABASEURL);
 
 app.set("view engine","ejs");
+//app.set('trust proxy', 1);
+
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public"));
 //app.use('/static', express.static(__dirname, 'public'));
@@ -30,16 +32,20 @@ app.use(flash());
 mongoose.connect(process.env.DATABASEURL||'mongodb://localhost:27017/yelp_camp_v11');
 app.use(session({
 	secret:"Hello-World",
-		store: new MongoStore({ mongooseConnection: mongoose.connection }),
+	// cookie:{
+	// secure: true,
+	// maxAge:60000
+	// },
+	 store: new MongoStore({ mongooseConnection: mongoose.connection }),
 	resave:false,
 	saveUninitialized:false
 }));
-app.use(function(req,res,next){
-if(!req.session){
-    return next(new Error('Oh no')) //handle error
-}
-next() //otherwise continue
-});
+// app.use(function(req,res,next){
+// if(!req.session){
+//     return next(new Error('Oh no')) //handle error
+// }
+// next() //otherwise continue
+// });
 //mongoose.connect({useFindAndModify:false,useNewUrlParser: true, useUnifiedTopology: true});
 //mongoose.connect('mongodb://localhost:27017/yelp_camp_v11', {useFindAndModify:false,useNewUrlParser: true, useUnifiedTopology: true});
 //mongoose.connect('mongodb+srv://ankit07:Ron@ldo07@cluster0.t1rgd.gcp.mongodb.net/ankit07?retryWrites=true&w=majority', {useFindAndModify:false,useNewUrlParser: true, useUnifiedTopology: true});
@@ -48,16 +54,17 @@ next() //otherwise continue
 //seedDB();
 
 //Passport Configuration
-app.use(session({
-	secret:"Hello World!!",
-	resave:false,
-	saveUninitialized:false
-}));
+// app.use(session({
+// 	secret:"Hello World!!",
+// 	resave:false,
+// 	saveUninitialized:false
+// }));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
 
 app.use(function(req,res,next){
 	res.locals.currentUser=req.user;
