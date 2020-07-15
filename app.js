@@ -34,7 +34,8 @@ app.use(session({
 	secret:"Hello-World",
 	// cookie:{
 	// secure: true,
-	// maxAge:60000
+//	maxAge  : new Date(Date.now() + 3600000), //1 Hour
+	// expires : new Date(Date.now() + 3600000) //1 Hour
 	// },
 	 store: new MongoStore({ mongooseConnection: mongoose.connection }),
 	resave:false,
